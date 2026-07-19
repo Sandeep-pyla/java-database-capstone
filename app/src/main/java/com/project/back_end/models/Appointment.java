@@ -1,7 +1,12 @@
 package com.project.back_end.models;
 
-import java.lang.annotation.Inherited;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 public class Appointment {
@@ -54,14 +59,19 @@ public class Appointment {
 //      - The @NotNull annotation ensures that the status field is not null.
     @NotNull
     private int status;
-// 6. 'getEndTime' method:
+
+    public Appointment() {
+
+    }
+
+    // 6. 'getEndTime' method:
 //    - Type: private LocalDateTime
 //    - Description:
 //      - This method is a transient field (not persisted in the database).
 //      - It calculates the end time of the appointment by adding one hour to the start time (appointmentTime).
 //      - It is used to get an estimated appointment end time for display purposes.
     private LocalDateTime getEndTime(){
-        return appointmentTime.addHour(1);
+        return appointmentTime.plusHours(1);
     }
 // 7. 'getAppointmentDate' method:
 //    - Type: private LocalDate
@@ -69,7 +79,7 @@ public class Appointment {
 //      - This method extracts only the date part from the appointmentTime field.
 //      - It returns a LocalDate object representing just the date (without the time) of the scheduled appointment.
     private LocalDate getAppointmentDate(){
-        return appointmentTime.getDate();
+        return appointmentTime.toLocalDate();
     }
 // 8. 'getAppointmentTimeOnly' method:
 //    - Type: private LocalTime
@@ -77,7 +87,7 @@ public class Appointment {
 //      - This method extracts only the time part from the appointmentTime field.
 //      - It returns a LocalTime object representing just the time (without the date) of the scheduled appointment.
     private LocalTime getAppointmentTimeOnly(){
-        return appointmentTime.getTime();
+        return appointmentTime.toLocalTime();
     }
 // 9. Constructor(s):
 //    - A no-argument constructor is implicitly provided by JPA for entity creation.
