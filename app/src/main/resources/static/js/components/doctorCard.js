@@ -39,3 +39,82 @@ Import the overlay function for booking appointments from loggedPatient.js
   Append doctor info and action buttons to the car
   Return the complete doctor card element
 */
+import {showBookingOverlay} from "../loggedPatient";
+import {deleteDoctor} from "../services/doctorServices";
+import {fetchPatientDetails} from "../services/patientServices";
+
+export function createDoctorCard(doctor) {
+    const card = document.createElement('div');
+    card.className = 'doctor-card';
+
+    const userRole = localStorage.getItem('userRole');
+
+    const doctorInfo = document.createElement('div');
+    doctorInfo.className = 'doctor-info';
+
+    const name = document.createElement('h3');
+    name.textContent = doctor.name;
+
+    const specialization = document.createElement('p');
+    specialization.textContent = `Specialization: ${doctor.specialization}`;
+
+    const email = document.createElement('p');
+    email.textContent = `Email: ${doctor.email}`;
+
+    const availableTime = document.getElementById('availableTime');
+    availableTime.textContent = `Available Time: ${doctor.availableTime}`;
+
+    doctorInfo.appendChild(name);
+    doctorInfo.appendChild(specialization);
+    doctorInfo.appendChild(email);
+    doctorInfo.appendChild(availableTime);
+
+    const actions = document.createElement('div');
+    actions.className = 'card-actions';
+
+    if (userRole === 'admin') {
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.addEventListener('click', async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Admin token not found. Please log in again.');
+                return;
+            }
+            try {
+                const response = await deleteDoctor(doctor.id, token);
+                if (response.success) {
+                    alert('Doctor deleted successfully.');
+                    card.remove();
+                } else {
+                    alert('Failed to delete doctor: ' + response.message);
+                }
+            } catch (error) {
+                console.error('Error deleting doctor:', error);
+                alert('An error occurred while deleting the doctor.');
+            }
+        });
+        actions.appendChild(deleteButton);
+    } else if (userRole === "patient") {
+        const bookNow = document.createElement("button");
+        bookNow.textContent = "Book Now";
+        bookNow.addEventListener("click", () => {
+            alert("Patient needs to login first.");
+        });
+        actions.appendChild(bookNow);
+    } else if (userRole === "loggedPatient") {
+        const bookNow = document.createElement("button");
+        bookNow.textContent = "Book Now";
+        bookNow.addEventListener("click", async (e) => {
+            const token = localStorage.getItem("token");
+            const patientData = await fetchPatientDetails(token);
+            showBookingOverlay(e, doctor, patientData);
+        });
+        actions.appendChild(bookNow);
+    }
+
+    card.appendChild(doctorInfo);
+    card.appendChild(actions);
+
+    return card;
+}
