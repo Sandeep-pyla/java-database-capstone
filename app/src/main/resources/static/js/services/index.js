@@ -56,3 +56,73 @@
     - Log the error to the console
     - Show a generic error message
 */
+import {openModal} from "../components/modals";
+import {BASE_API_URL} from "../config";
+
+const admin = BASE_API_URL.concat("/admin");
+const doctor = BASE_API_URL.concat("/doctor/login");
+
+window.onload = function() {
+    const adminLoginButton = document.getElementById("adminLogin");
+    const doctorLoginButton = document.getElementById("doctorLogin");
+
+    if (adminLoginButton) {
+        adminLoginButton.addEventListener("click", () => openModal('adminLogin'));
+    }
+
+    if (doctorLoginButton) {
+        doctorLoginButton.addEventListener("click", () => openModal('doctorLogin'));
+    }
+};
+
+window.adminLoginHandler = async function() {
+    const username = document.getElementById("adminUsername").value;
+    const password = document.getElementById("adminPassword").value;
+
+    const adminCredentials = { username, password };
+
+    try {
+        const response = await fetch(admin, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(adminCredentials)
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem("token", data.token);
+            selectRole('admin');
+        } else {
+            alert("Invalid admin credentials. Please try again.");
+        }
+    } catch (error) {
+        console.error("Error during admin login:", error);
+        alert("An error occurred. Please try again later.");
+    }
+};
+
+window.doctorLoginHandler = async function() {
+    const email = document.getElementById("doctorEmail").value;
+    const password = document.getElementById("doctorPassword").value;
+
+    const doctorCredentials = { email, password };
+
+    try {
+        const response = await fetch(doctor, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(doctorCredentials)
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem("token", data.token);
+            selectRole('doctor');
+        } else {
+            alert("Invalid doctor credentials. Please try again.");
+        }
+    } catch (error) {
+        console.error("Error during doctor login:", error);
+        alert("An error occurred. Please try again later.");
+    }
+}

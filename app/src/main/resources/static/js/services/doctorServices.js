@@ -51,3 +51,63 @@
 
    Catch any other errors, alert the user, and return a default empty result
 */
+import {API_BASE_URL} from "../config/config";
+const DOCTOR_API = API_BASE_URL.concat("/doctor");
+
+async function getDoctors(){
+    const response = await fetch(DOCTOR_API, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+    });
+    if (response.ok) {
+        const data = await response.json();
+        return data.doctors;
+    } else {
+        console.error("Error fetching doctors:", response.statusText);
+        return [];
+    }
+}
+function deleteDoctor(id, token){
+    const endAPI = DOCTOR_API.concat(`/delete/${id}/${token}`);
+    return fetch(endAPI, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" }
+    })
+    .then(response => response.json())
+    .then(data => {
+        return { success: data.success, message: data.message };
+    })
+    .catch(error => {
+        console.error("Error deleting doctor:", error);
+        return { success: false, message: "Error deleting doctor" };
+    });
+}
+
+async function saveDoctor(doctor, token){
+    const response = await fetch(DOCTOR_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(doctor)
+    });
+    if (response.ok) {
+        const data = await response.json();
+        return { success: data.success, message: data.message };
+    } else {
+        console.error("Error saving doctor:", response.statusText);
+        return { success: false, message: "Error saving doctor" };
+    }
+}
+async function filterDoctors(name, time, speciality){
+    const response = await fetch(DOCTOR_API,{
+        method: "POST",
+        headers:{"Content-Type": "application/json"},
+        body: JSON.stringify({name, time, speciality})
+    });
+    if (response.ok) {
+        const data = await response.json();
+        return data.doctors;
+    } else {
+        console.error("Error filtering doctors:", response.statusText);
+        return [];
+    }
+}

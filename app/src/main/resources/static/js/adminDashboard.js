@@ -70,3 +70,86 @@
 
     If saving fails, show an error message
 */
+function loadDoctorCards(){
+    getDoctors()
+        .then(doctors => {
+            const contentDiv = document.getElementById("content");
+            contentDiv.innerHTML = "";
+            doctors.forEach(doctor => {
+                const card = createDoctorCard(doctor);
+                contentDiv.appendChild(card);
+            });
+        })
+        .catch(error => {
+            console.error("Error loading doctor cards:", error);
+        });
+}
+function filterDoctorsOnChange() {
+    const name = document.getElementById("searchBar").value.trim() || null;
+    const time = document.getElementById("timeFilter").value || null;
+    const specialty = document.getElementById("specialtyFilter").value || null;
+
+    filterDoctors(name, time, specialty)
+        .then(doctors => {
+            if (doctors.length > 0) {
+                renderDoctorCards(doctors);
+            } else {
+                const contentDiv = document.getElementById("content");
+                contentDiv.innerHTML = "<p>No doctors found with the given filters.</p>";
+            }
+        })
+        .catch(error => {
+            alert("Error filtering doctors: " + error.message);
+        });
+}
+function renderDoctorCards(doctors) {
+    const contentDiv = document.getElementById("content");
+    contentDiv.innerHTML = "";
+    doctors.forEach(doctor => {
+        const card = createDoctorCard(doctor);
+        contentDiv.appendChild(card);
+    });
+}
+function adminAddDoctor() {
+    const name = document.getElementById("doctorName").value.trim();
+    const email = document.getElementById("doctorEmail").value.trim();
+    const phone = document.getElementById("doctorPhone").value.trim();
+    const password = document.getElementById("doctorPassword").value.trim();
+    const specialty = document.getElementById("doctorSpecialty").value.trim();
+    const availableTimes = Array.from(document.querySelectorAll("#doctorAvailableTimes input[type='checkbox']:checked"))
+        .map(checkbox => checkbox.value);
+
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+        alert("Authentication token not found. Please log in again.");
+        return;
+    }
+
+    const doctor = {
+        name,
+        email,
+        phone,
+        password,
+        specialty,
+        availableTimes
+    };
+
+    saveDoctor(doctor, token)
+        .then(response => {
+            alert("Doctor added successfully!");
+            closeModal('addDoctor');
+            loadDoctorCards(); // Reload the doctor cards to reflect the new addition
+        })
+        .catch(error => {
+            alert("Error adding doctor: " + error.message);
+        });
+}
+document.addEventListener("DOMContentLoaded", () => {
+    loadDoctorCards();
+
+    document.getElementById("searchBar").addEventListener("input", filterDoctorsOnChange);
+    document.getElementById("timeFilter").addEventListener("change", filterDoctorsOnChange);
+    document.getElementById("specialtyFilter").addEventListener("change", filterDoctorsOnChange);
+
+    document.getElementById("addDoctorButton").addEventListener("click", () => openModal('addDoctor'));
+});

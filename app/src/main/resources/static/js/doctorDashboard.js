@@ -52,3 +52,57 @@
     - Call renderContent() (assumes it sets up the UI layout)
     - Call loadAppointments() to display today's appointments by default
 */
+import {getAllAppointments} from "./services/appointmentRecordService";
+import {patientRow} from "./components/patientRow";
+
+const tableBody = document.getElementById("patient-table-body");
+let selectedDate = new Date().toISOString().split('T')[0]; // Default to today's date
+const token = localStorage.getItem("token");
+let patientName = null; // Initialize patientName to null for filtering
+
+document.getElementById("search-bar").addEventListener("input", (event) => {
+    const inputValue = event.target.value.trim();
+    patientName = inputValue !== "" ? inputValue : "null"; // Use "null" if input is empty
+    loadAppointments();
+});
+
+document.getElementById("today-button").addEventListener("click", () => {
+    selectedDate = new Date().toISOString().split('T')[0]; // Reset to today's date
+    document.getElementById("date-picker").value = selectedDate; // Update the date picker UI
+    loadAppointments();
+});
+
+document.getElementById("date-picker").addEventListener("change", (event) => {
+    selectedDate = event.target.value; // Update selectedDate with the new value
+    loadAppointments();
+});
+
+async function loadAppointments() {
+    try {
+        const appointments = await getAllAppointments(selectedDate, patientName, token);
+        tableBody.innerHTML = ""; // Clear existing rows
+
+        if (appointments.length === 0) {
+            const noDataRow = document.createElement("tr");
+            noDataRow.innerHTML = `<td colspan="4" class="text-center">No Appointments found for today.</td>`;
+            tableBody.appendChild(noDataRow);
+            return;
+        }
+
+        appointments.forEach(appointment => {
+            const patient = {
+                id: appointment.patientId,
+                name: appointment.patientName,
+                phone: appointment.patientPhone,
+                email: appointment.patientEmail
+            };
+            const row = patientRow(patient, appointment);
+            tableBody.appendChild(row);
+        });
+    } catch (error) {
+        const errorRow = document.createElement("tr");
+        errorRow.innerHTML = `<td colspan="4" class="text-center">Error loading appointments. Try again later.</td>`;
+        tableBody.appendChild(errorRow);
+        console.error("Error loading appointments:", error);
+    }
+}
