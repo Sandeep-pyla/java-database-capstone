@@ -99,3 +99,54 @@ This file defines the Doctor Dashboard interface, allowing doctors to view and m
 
     * Properly close the `<body>` and `<html>` tags to complete the document.
  -->
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/png" th:href="@{/assets/images/logo/logo.png}" />
+    <title>Doctor Dashboard</title>
+
+    <link rel="stylesheet" href="../../static/css/adminDashboard.css" th:href="@{/assets/css/adminDashboard.css}" />
+    <link rel="stylesheet" href="../../static/css/doctorDashboard.css" th:href="@{/assets/css/doctorDashboard.css}" />
+    <link rel="stylesheet" href="../../static/css/style.css" th:href="@{/assets/css/style.css}" />
+
+    <script src="../../static/js/render.js" th:src="@{/assets/js/render.js}" defer></script>
+    <script src="../../static/js/util.js" th:src="@{/assets/js/util.js}" defer></script>
+    <script src="../../static/js/header.js" th:src="@{/assets/js/header.js}" defer></script>
+    <script src="../../static/js/footer.js" th:src="@{/assets/js/footer.js}" defer></script>
+    <script type="module" src="../../static/js/doctorDashboard.js" th:src="@{/assets/js/doctorDashboard.js}" defer></script>
+</head>
+<body onload="renderContent()">
+    <div class="container">
+        <div class="wrapper">
+            <div id="header"><!--inject header using JS--></div>
+            <main class="main-content">
+                <input type="text" id="searchBar" class="searchBar" placeholder="Search Bar for custom output" />
+                <div class="filter-section">
+                    <button id="todayButton">Today</button>
+                    <input type="date" id="datePicker" />
+                </div>
+                <table class="patient-table">
+                    <thead>
+                        <tr>
+                            <th>Patient ID</th>
+                            <th>Name</th>
+                            <th>Phone No.</th>
+                            <th>Email</th>
+                            <th>Prescription</th>
+                        </tr>
+                    </thead>
+                    <tbody id="patientTableBody">
+                        <!-- Dynamic patient rows will be injected here -->
+                    </tbody>
+                </table>
+            </main>
+            <div id="footer"><!--inject footer using JS--></div>
+        </div>
+    </div>
+
+</body>
+</html>
