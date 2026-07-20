@@ -106,4 +106,53 @@ with search, filter, and modal functionality.
     * Finish the structure by properly closing all tags.
 
  -->
-
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Admin Dashboard</title>
+    <link rel="icon" type="image/png" th:href="@{/assets/images/logo/logo.png}" />
+    <!-- CSS stylesheets-->
+    <link rel="stylesheet" href="../../static/css/adminDashboard.css">
+    <link rel="stylesheet" href="../../static/css/style.css">
+    <!-- JavaScript files -->
+    <script th:src="@{/js/render.js}" defer></script>
+    <script th:src="@{/js/util.js}" defer></script>
+    <script th:src="@{/js/header.js}" defer></script>
+    <script th:src="@{/js/footer.js}" defer></script>
+    <script type="module" src="../../static/js/adminDashboard.js" defer></script>
+    <script type="module" src="../../static/js/doctorCard.js" defer></script>
+</head>
+<body onload="renderContent()">
+    <div class="container">
+        <div class="wrapper">
+            <div id="header"><!--inject header using JS--></div>
+            <main class="main-content">
+                <input type="text" id="searchBar" placeholder="Search...">
+                <select name="time" id="timeFilter">
+                    <option value="am">AM</option>
+                    <option value="pm">PM</option>
+                </select>
+                <select name="specialty" id="specialtyFilter">
+                    <option value="cardiologist">Cardiologist</option>
+                    <option value="dentist">Dentist</option>
+                    <!-- Add more specialties as needed -->
+                </select>
+                <div id="content"><!--dynamic injection of doctor cards or data--></div>
+                <div id="footer"><!--inject footer using JS--></div>
+                <!-- Modal Structure -->
+                <div id="modal" class="modal">
+                    <button class="close-btn">&times;</button>
+                    <div id="modal-body"><!--for displaying popup info or forms --></div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <!--Load JS specific to adminDashboard -->
+    <script type="module" src="../../static/js/adminDashboard.js" defer></script>
+    <script type="module" src="../../static/js/doctorDashboard.js" defer></script>
+</body>
+</html>

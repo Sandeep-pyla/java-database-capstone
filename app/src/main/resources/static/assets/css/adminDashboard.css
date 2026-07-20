@@ -92,3 +92,31 @@ Admin Button (`.adminBtn`)
 
 
 */
+*{margin:0; padding:0; box-sizing:border-box}
+html, body{
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+h2{
+    font-size: 32px; /* makes the heading large and noticeable */
+    font-weight: bold; /* emphasizes text */
+    margin-bottom: 50px; /* creates space below the heading */
+    color: #003e3e; /* uses a strong teal for visual anchoring */
+}
+.main-content{
+    flex-grow: 1; /* lets the content fill the available vertical space */
+    padding: 40px; /* adds internal spacing around content */
+    display: flex;
+    flex-direction: column; /* organizes content in a vertical stack */
+    text-align: center; /* centers the text */
+    background-image: url("../images/defineRole/index.png"); /* sets a full-screen dashboard background */
+    background-size: cover; /* ensures the image covers the whole section */
+    background-position: center; /* centers the image */
+    background-repeat: no-repeat; /* avoids tiling the image */
+    background-attachment: fixed; /* fixes the image while scrolling */
+}

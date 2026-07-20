@@ -102,3 +102,48 @@ and triggers modal-based login functionality.
     * Properly close all opened tags to complete the document structure.
 
  -->
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Clinic Management System</title>
+    <link rel="stylesheet" href="../assets/css/index.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <!-- JS Utility links -->
+    <script src="../js/util.js" defer></script>
+    <script src="../js/render.js" defer></script>
+    <!-- JS Component links -->
+    <script src="../js/components/header.js" defer></script>
+    <script src="../js/components/footer.js" defer></script>
+</head>
+<body>
+    <main>
+        <div class="container">
+            <div class="wrapper">
+                <div id="header">
+
+                </div>
+                <main class="main-content">
+                    <h2>Select Your Role</h2>
+                    <button id="adminBtn" class="role-btn" onClick="selectRole('admin')">Admin</button>
+                    <button id="patientBtn" class="role-btn" onClick="selectRole('patient')">Patient</button>
+                    <button id="doctorBtn" class="role-btn" onClick="selectRole('doctor')">Doctor</button>
+                </main>
+                <div id="footer"></div>
+            </div>
+        </div>
+    </main>
+    <div id="modal" class="modal">
+        <button id="closeModal">Close</button>
+        <div id="modal-body">
+            <!--dynamic content area-->
+        </div>
+    </div>
+    <!-- Service for role selection and modal behaviour -->
+    <script type="module" src="../js/services/index.js" defer></script>
+</body>
+
+</html>
