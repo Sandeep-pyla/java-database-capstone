@@ -4,6 +4,7 @@ package com.project.back_end.services;
 import com.project.back_end.DTO.Login;
 import com.project.back_end.models.Admin;
 import com.project.back_end.models.Appointment;
+import com.project.back_end.models.Doctor;
 import com.project.back_end.models.Patient;
 import com.project.back_end.repo.AdminRepository;
 import com.project.back_end.repo.DoctorRepository;
@@ -149,4 +150,8 @@ public class Service {
         }
         return ResponseEntity.status(401).body(Map.of("message", "patient not available"));
     }
+    public boolean validateDoctor(Doctor doctor){
+        return doctorRepository.findByEmail(doctor.getEmail()) == null;
+    }
+
 }

@@ -55,7 +55,7 @@ public class PatientService {
         @Transactional
         public ResponseEntity<Map<String, Object>> getPatientAppointments(Long id, String token) {
             try {
-                String email = tokenService.extractUsername(token);
+                String email = tokenService.extractEmail(token);
                 Patient patient = patientRepository.findByEmail(email);
                 if (patient == null || !patient.getId().equals(id)) {
                     return ResponseEntity.status(401).body(Map.of("error", "Unauthorized access"));
@@ -145,7 +145,7 @@ public class PatientService {
     //    - Instruction: Make sure that the token extraction process works correctly and patient details are fetched properly based on the extracted email.
     public ResponseEntity<Map<String, Object>> getPatientDetails(String token) {
         try {
-            String email = tokenService.extractUsername(token);
+            String email = tokenService.extractEmail(token);
             Patient patient = patientRepository.findByEmail(email);
             if (patient == null) {
                 return ResponseEntity.status(404).body(Map.of("error", "Patient not found"));
