@@ -5,6 +5,7 @@ import com.project.back_end.models.Doctor;
 import com.project.back_end.repo.AppointmentRepository;
 import com.project.back_end.repo.DoctorRepository;
 import jakarta.transaction.Transactional;
+import org.hibernate.annotations.Fetch;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
