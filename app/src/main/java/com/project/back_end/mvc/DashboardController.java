@@ -1,5 +1,6 @@
 package com.project.back_end.mvc;
 
+import com.project.back_end.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class DashboardController {
 // 2. Autowire the Shared Service:
 //    - Inject the common `Service` class, which provides the token validation logic used to authorize access to dashboards.
     @Autowired
-    private Service service;
+    private TokenService tokenService;
 
 // 3. Define the `adminDashboard` Method:
 //    - Handles HTTP GET requests to `/adminDashboard/{token}`.
@@ -28,7 +29,7 @@ public class DashboardController {
 //    - If invalid, redirects to the root URL, likely the login or home page.
     @GetMapping("/adminDashboard/{token}")
     public String adminDashboard(@PathVariable String token) {
-        if (service.validateToken(token, "admin")) {
+        if (tokenService.validateToken(token, "admin")) {
             return "admin/adminDashboard";
         } else {
             return "redirect:/";
@@ -43,7 +44,7 @@ public class DashboardController {
 //    - If the token is invalid, redirects to the root URL.
     @GetMapping("/doctorDashboard/{token}")
     public String doctorDashboard(@PathVariable String token) {
-        if (service.validateToken(token, "doctor")) {
+        if (tokenService.validateToken(token, "doctor")) {
             return "doctor/doctorDashboard";
         } else {
             return "redirect:/";

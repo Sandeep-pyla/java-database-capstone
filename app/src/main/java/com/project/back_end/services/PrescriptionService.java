@@ -1,5 +1,14 @@
 package com.project.back_end.services;
 
+import com.project.back_end.models.Prescription;
+import com.project.back_end.repo.PrescriptionRepository;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+@Service
 public class PrescriptionService {
     
  // 1. **Add @Service Annotation**:
@@ -11,20 +20,53 @@ public class PrescriptionService {
 //    - The `PrescriptionService` class depends on the `PrescriptionRepository` to interact with the database.
 //    - It is injected through the constructor, ensuring proper dependency management and enabling testing.
 //    - Instruction: Constructor injection is a good practice, ensuring that all necessary dependencies are available at the time of service initialization.
-
+    private PrescriptionRepository prescriptionRepository;
+    public PrescriptionService(PrescriptionRepository prescriptionRepository){
+        this.prescriptionRepository = prescriptionRepository;
+    }
 // 3. **savePrescription Method**:
 //    - This method saves a new prescription to the database.
 //    - Before saving, it checks if a prescription already exists for the same appointment (using the appointment ID).
 //    - If a prescription exists, it returns a `400 Bad Request` with a message stating the prescription already exists.
 //    - If no prescription exists, it saves the new prescription and returns a `201 Created` status with a success message.
 //    - Instruction: Handle errors by providing appropriate status codes and messages, ensuring that multiple prescriptions for the same appointment are not saved.
+        public ResponseEntity<Map<String, String>> savePrescription(Prescription prescription){
 
+            try {
+                // Check if a prescription already exists for the given appointment ID
+                List<Prescription> existingPrescription = prescriptionRepository.findByAppointmentId(prescription.getAppointmentId());
+                if (existingPrescription != null && !existingPrescription.isEmpty()) {
+                    return ResponseEntity.status(400).body(Map.of("message", "Prescription already exists for this appointment."));
+                }
+                // Save the new prescription
+                prescriptionRepository.save(prescription);
+                return ResponseEntity.status(201).body(Map.of("message", "Prescription saved successfully."));
+            } catch (Exception e) {
+                // Log the error and return a 500 Internal Server Error response
+                e.printStackTrace();
+                return ResponseEntity.status(500).body(Map.of("message", "An error occurred while saving the prescription."));
+            }
+        }
 // 4. **getPrescription Method**:
 //    - Retrieves a prescription associated with a specific appointment based on the `appointmentId`.
 //    - If a prescription is found, it returns it within a map wrapped in a `200 OK` status.
 //    - If there is an error while fetching the prescription, it logs the error and returns a `500 Internal Server Error` status with an error message.
 //    - Instruction: Ensure that this method handles edge cases, such as no prescriptions found for the given appointment, by returning meaningful responses.
 
+        public ResponseEntity<Map<String, Object>> getPrescription(Long appointmentId){
+            try {
+                List<Prescription> prescription = prescriptionRepository.findByAppointmentId(appointmentId);
+                if (prescription != null && !prescription.isEmpty()) {
+                    return ResponseEntity.ok(Map.of("prescription", prescription));
+                } else {
+                    return ResponseEntity.status(404).body(Map.of("message", "No prescription found for this appointment."));
+                }
+            } catch (Exception e) {
+                // Log the error and return a 500 Internal Server Error response
+                e.printStackTrace();
+                return ResponseEntity.status(500).body(Map.of("message", "An error occurred while fetching the prescription."));
+            }
+        }
 // 5. **Exception Handling and Error Responses**:
 //    - Both methods (`savePrescription` and `getPrescription`) contain try-catch blocks to handle exceptions that may occur during database interaction.
 //    - If an error occurs, the method logs the error and returns an HTTP `500 Internal Server Error` response with a corresponding error message.
