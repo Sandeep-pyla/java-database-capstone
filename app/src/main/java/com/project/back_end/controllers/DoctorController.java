@@ -54,7 +54,7 @@ public class DoctorController {
 // 4. Define the `getDoctor` Method:
 //    - Handles HTTP GET requests to retrieve a list of all doctors.
 //    - Returns the list within a response map under the key `"doctors"` with HTTP 200 OK status.
-    @GetMapping("/doctors")
+    @GetMapping
     public ResponseEntity<Map<String, Object>> getAllDoctors() {
         Map<String, Object> response = new HashMap<>();
         var doctors = doctorService.getDoctors();
