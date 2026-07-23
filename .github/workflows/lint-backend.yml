@@ -3,7 +3,7 @@ name: Lint Backend
 on: [push, pull_request]
 
 jobs:
-  lint-backend:
+  lint-java:
     runs-on: ubuntu-latest
     name: Checkstyle Java Linting
     steps:
@@ -14,12 +14,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-
-      - name: Install linters
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y checkstyle ktlint
-
       - name: Download Checkstyle
         run:
           curl -L -o checkstyle.jar https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.12.1/checkstyle-10.12.1-all.jar
