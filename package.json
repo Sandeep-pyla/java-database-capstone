@@ -1,0 +1,19 @@
+{
+  "name": "com.project.back_end",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "sandeep pyla",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sandeep-pyla/java-database-capstone.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Sandeep-pyla/java-database-capstone/issues"
+  },
+  "homepage": "https://github.com/Sandeep-pyla/java-database-capstone#readme"
+}
